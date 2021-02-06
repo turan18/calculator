@@ -57,6 +57,17 @@
 	height: 10%;
 	outline: 2px solid blue;
 }
+.display-ans{
+	outline: 2px solid blue;
+}
+.sign{
+	outline: 2px solid yellow;
+}
+.equation{
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
 .numpad{
 	display: grid;
 	grid-template-columns: auto auto auto auto;
