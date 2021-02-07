@@ -55,14 +55,14 @@
 }
 .preview{
 	height: 10%;
-	outline: 2px solid blue;
+	/* outline: 2px solid blue; */
 }
-.display-ans{
+/* .display-ans{
 	outline: 2px solid blue;
 }
 .sign{
 	outline: 2px solid yellow;
-}
+} */
 .equation{
 	display: flex;
 	align-items: center;

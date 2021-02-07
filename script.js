@@ -25,11 +25,13 @@ Array.from(document.querySelectorAll('.operator')).forEach(operation=>{
             
         }
         if(operation.getAttribute('id')=='divide'){
-            display(String.fromCharCode(operation.getAttribute("data-key")));
+            display('÷')
+            // display(String.fromCharCode(operation.getAttribute("data-key")));
 
         }
         if(operation.getAttribute('id')=='mult'){
-            display(String.fromCharCode(operation.getAttribute("data-key")));
+            display('×')
+            // display(String.fromCharCode(operation.getAttribute("data-key")));
            
         }
         if(operation.getAttribute('id')=='subtract'){
@@ -57,7 +59,12 @@ Array.from(document.querySelectorAll('.misc')).forEach(element=>{
 
 function singledel(){
     let number = document.querySelector('.display-ans')
-    number.removeChild(number.lastChild);
+    try {
+        number.removeChild(number.lastChild);    
+    } catch (error) {
+        console.log('You have deleted every text node.')
+    }
+    
 }
 
 function clearall(){
@@ -69,9 +76,6 @@ function clearall(){
     preview.textContent='';
 }
 
-
-
-
 function display(op){
     let number = (document.querySelector('.answer').textContent).replace(/\s/g, "");
     if(number.indexOf('.') + 1 === number.length){
@@ -80,8 +84,14 @@ function display(op){
     if(number.charAt(0) === '.' && number.length>1){
         number = '0' + number;
     }
-    let dispreview = document.createTextNode(number + op);
-    test++;
+    if(number.charAt(0)==='0' && number.charAt(1)!=='.'){
+        number = number.slice(1,number.legnth)
+    }
+    if(number.charAt(0) === '0' && number.charAt(1) === '0'){
+        number = '';
+    }
+    let dispreview = document.createTextNode(' ' + number + ' ' + op);
+    test++;//added to ensure that the number entered stays until another number after the operator is pressed
     if(number!==''){
         document.querySelector('.equation').appendChild(dispreview);
     }
