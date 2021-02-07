@@ -1,16 +1,19 @@
-
-
-
 let counter = 0;
+let test = 0;
 Array.from(document.querySelectorAll('.num')).forEach(button=>{
     button.addEventListener('click',function(){
         let value = document.createTextNode(String.fromCharCode(button.getAttribute("data-key")));
         if(String.fromCharCode(button.getAttribute("data-key"))==="."){            
             counter++;
         }
+        if(test>0){
+            document.querySelector('.sign').textContent = ''; document.querySelector('.display-ans').textContent = '';  
+        }
         if(!(String.fromCharCode(button.getAttribute("data-key"))==="." && counter>1)){
             document.querySelector('.display-ans').appendChild(value);
         }
+      
+        test = 0;
     });
 });
 
@@ -18,12 +21,8 @@ Array.from(document.querySelectorAll('.operator')).forEach(operation=>{
     operation.addEventListener('click',()=>{
         if(operation.getAttribute('id')=='sign'){
             let sign = (document.querySelector('.sign').textContent).replace(/\s/g, "");
-            if(sign===''){
-                document.querySelector('.sign').textContent = '-'
-            }
-            else{
-                document.querySelector('.sign').textContent = ''
-            }
+            sign==='' ? document.querySelector('.sign').textContent = '-' : document.querySelector('.sign').textContent = ''
+            
         }
         if(operation.getAttribute('id')=='divide'){
             display(String.fromCharCode(operation.getAttribute("data-key")));
@@ -43,13 +42,46 @@ Array.from(document.querySelectorAll('.operator')).forEach(operation=>{
         }
     })
 })
+
+
+Array.from(document.querySelectorAll('.misc')).forEach(element=>{
+    element.addEventListener('click',()=>{
+        if(element.getAttribute('id')==='del'){
+            singledel();
+        }
+        if(element.getAttribute('id')==='clear'){
+            clearall();
+        }
+    })
+})
+
+function singledel(){
+    let number = document.querySelector('.display-ans')
+    number.removeChild(number.lastChild);
+}
+
+function clearall(){
+    let number = document.querySelector('.display-ans')
+    let sign = document.querySelector('.sign');
+    let preview = document.querySelector('.equation');
+    number.innerHTML = '';
+    sign.textContent = '';
+    preview.textContent='';
+}
+
+
+
+
 function display(op){
     let number = (document.querySelector('.answer').textContent).replace(/\s/g, "");
     if(number.indexOf('.') + 1 === number.length){
         number = number.replace('.','')
     }
+    if(number.charAt(0) === '.' && number.length>1){
+        number = '0' + number;
+    }
     let dispreview = document.createTextNode(number + op);
-    document.querySelector('.sign').textContent = ''; document.querySelector('.display-ans').textContent = '';  
+    test++;
     if(number!==''){
         document.querySelector('.equation').appendChild(dispreview);
     }
