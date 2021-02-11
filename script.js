@@ -1,5 +1,7 @@
 let counter = 0;
 let test = 0;
+
+
 function allEvents(){
     Array.from(document.querySelectorAll('.num')).forEach(button=>{
         button.addEventListener('click',function(){
@@ -71,11 +73,12 @@ function final(){
     let val = document.createTextNode((document.querySelector('.answer').textContent).replace(/\s/g, ""));
     let display = document.querySelector('.equation');
     display.appendChild(val);
-    return (document.querySelector('.equation').textContent).replace(/\s/g, "");
+    return (document.querySelector('.equation').textContent);
 }
 
 function calculate(eq){
-    console.log(eq)
+    let sample = eq.split(' ');
+    console.log(parser(tokenizer(sample)))
 }
 
 
@@ -113,7 +116,7 @@ function display(op){
     if(number.charAt(0) === '0' && number.charAt(1) === '0'){
         number = '';
     }
-    let numtodisplay = document.createTextNode(' ' + number + ' ');
+    let numtodisplay = document.createTextNode(number + ' ');
     let operatortodisplay = document.createTextNode(op + ' ');
     test++;//added to ensure that the number entered stays until another number after the operator is pressed
     
