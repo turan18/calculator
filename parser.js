@@ -136,6 +136,12 @@ function compute(rpn){
         }
             
     }
-    return rpn;
+    let answer = rpn.pop();
+    if(answer % 1 === 0){
+        return answer
+    }
+
+
+    return answer.toFixed(5);
 }
 
