@@ -5,6 +5,52 @@ class Token{
         this.precedence = precedence;
     }
 }
+// class Node{
+//     constructor(value){
+//         this.value = value;
+//         this.leftChild = null;
+//         this.rightChild = null;
+//     }
+// }
+// class astTree{
+    
+//     constructor(){
+//         this.root = null;
+//     }
+//     insert(val){
+//         let bfsQueue = [];
+//         let node = new Node(val);
+//         if(this.root === null){
+//             this.root = node;
+//             return this;
+//         }
+//        ;
+//         let root = this.root;
+//         bfsQueue.push(root);
+
+//         while(bfsQueue.length > 0){
+//             let current = bfsQueue.shift()
+            
+//             if(current.leftChild === null){
+//                 current.leftChild = node;
+//             }
+//             else if(current.rightChild === null){
+//                 current.rightChild = node;
+//             }
+            
+//             else if(current.leftChild !== null || current.rightChild !== null){
+//                 if(isNaN(current.leftChild.value)){             /// IF the current is an operator start searching left, assuming that the right ends because it is a literal(number)
+//                     bfsQueue.push(current.leftChild)
+//                 }
+//                 else{
+//                     bfsQueue.push(current.rightChild)
+//                 }
+//             }
+//         }
+//         return this;
+
+//     }    
+// }
 
 function tokenizer(expression){ // returns an array of Tokens each with a type(operator or operand), value, and precendence
     let tokens = [];
@@ -12,7 +58,7 @@ function tokenizer(expression){ // returns an array of Tokens each with a type(o
         let token = expression[i];
         if(!isNaN(token)){
             tokens.push(new Token('literal',token,null))
-        }
+        }   
         else if(token==='+'){
             tokens.push(new Token('operator','+',1))
         }
@@ -29,11 +75,9 @@ function tokenizer(expression){ // returns an array of Tokens each with a type(o
     return tokens;
 }
 
-function parser(tokens){ // Return reverse polish notation of expression. Computes left most as calculator, for now, does not account for special precedence IE parenthses
+function rpnParser(tokens){ // Return reverse polish notation of expression. Computes left most as calculator, for now, does not account for special precedence IE parenthses
     let outputQueue = [];
     let operatorStack = [];
-    
-   
     for(let i = 0; i < tokens.length; i++){
         let token = tokens[i];
 
@@ -59,3 +103,39 @@ function parser(tokens){ // Return reverse polish notation of expression. Comput
     }
    return outputQueue;
 }
+
+function compute(rpn){
+    console.log(rpn)
+    let value;
+    for(let i=0;i<rpn.length;i++){
+        
+        let current = rpn[i];
+        console.log('This is i: ' + i)
+        console.log('This is the current: ' + current)
+        console.log('________________________')
+        
+        if(current === '*'){
+            value = parseFloat(rpn[i-2]) * parseFloat(rpn[i-1]);
+            rpn.splice(i-2,3,value)
+            i=-1;
+        }
+        else if(current === '/'){
+            value = parseFloat(rpn[i-2]) / parseFloat(rpn[i-1]);
+            rpn.splice(i-2,3,value)
+            i=-1;
+        }
+        else if(current === '-'){
+            value = parseFloat(rpn[i-2]) - parseFloat(rpn[i-1]);
+            rpn.splice(i-2,3,value)
+            i=-1;
+        }
+        else if(current === '+'){
+            value = parseFloat(rpn[i-2]) + parseFloat(rpn[i-1]);
+            rpn.splice(i-2,3,value)
+            i=-1;
+        }
+            
+    }
+    return rpn;
+}
+

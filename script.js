@@ -78,7 +78,7 @@ function final(){
 
 function calculate(eq){
     let sample = eq.split(' ');
-    console.log(parser(tokenizer(sample)))
+    console.log(compute(rpnParser(tokenizer(sample))))
 }
 
 
