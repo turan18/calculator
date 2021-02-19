@@ -84,9 +84,10 @@ function calculate(eq){ // get answer and if equal is pressed only once display 
 
     if(equalPressed ===1){
         let sample = eq.split(' ');
+        let sign = document.querySelector('.sign');
         let displayAnswer = document.querySelector('.display-ans')
         let answer = document.createTextNode(compute(rpnParser(tokenizer(sample))));
-        displayAnswer.innerHTML = ''; 
+        displayAnswer.innerHTML = '';sign.textContent = '';
         displayAnswer.appendChild(answer);
     }  
     console.log(`This is equal pressed ${equalPressed}`)
