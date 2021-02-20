@@ -1,31 +1,44 @@
-let counter = 0;
-let equalPressed = 0;
-let test = 0;
+
+let allNumbers = Array.from(document.querySelectorAll('.num'));
+let allOperators = Array.from(document.querySelectorAll('.operator'));
+let miscalenousButtons = Array.from(document.querySelectorAll('.misc'));
+
+let entireExpression = document.querySelector('.answer');//the entire expression
+
+let sign = document.querySelector('.sign');//sign of the number
+let displayAnswer = document.querySelector('.display-ans');//just the number without the sign
+
+let previewExpression = document.querySelector('.equation');
+
+
+let counter = 0;//make sure user cant enter more than one decimal
+let equalPressed = 0; //make sure user cant enter equal more than once
+let test = 0;//make sure entered number stays in the top bar after operator button is pressed
 
 function allEvents(){
-    Array.from(document.querySelectorAll('.num')).forEach(button=>{ //Add a listner to each number
+    allNumbers.forEach(button=>{ //Add a listner to each number
         button.addEventListener('click',function(){
             let value = document.createTextNode(String.fromCharCode(button.getAttribute("data-key")));
             if(String.fromCharCode(button.getAttribute("data-key"))==="."){            
                 counter++;
             }
             if(test>0){
-                document.querySelector('.sign').textContent = ''; document.querySelector('.display-ans').textContent = '';  
+                sign.textContent = ''; displayAnswer.textContent = '';  
             }
             if(!(String.fromCharCode(button.getAttribute("data-key"))==="." && counter>1)){
-                document.querySelector('.display-ans').appendChild(value);
+                displayAnswer.appendChild(value);
             }
-          
+            equalPressed = 0; // reset equal everytime a number is pressed so user can press equal
             test = 0;
         });
     });
     
-    Array.from(document.querySelectorAll('.operator')).forEach(operation=>{ //ADD a listener for each operation
+    allOperators.forEach(operation=>{ //ADD a listener for each operation
         operation.addEventListener('click',()=>{
-           
+            
             if(operation.getAttribute('id')=='sign'){
-                let sign = (document.querySelector('.sign').textContent).replace(/\s/g, "");
-                sign==='' ? document.querySelector('.sign').textContent = '-' : document.querySelector('.sign').textContent = ''
+                let signNoSpace = (sign.textContent).replace(/\s/g, "");
+                signNoSpace ==='' ? sign.textContent = '-' : sign.textContent = ''
                 
             }
             if(operation.getAttribute('id')=='divide'){
@@ -44,14 +57,12 @@ function allEvents(){
             }
             if(operation.getAttribute('id')=='add'){
                 display(String.fromCharCode(operation.getAttribute("data-key")));
-    
             }
         })
     })
     
     
-    Array.from(document.querySelectorAll('.misc')).forEach(element=>{
-        
+    miscalenousButtons.forEach(element=>{
         element.addEventListener('click',()=>{
             if(element.getAttribute('id')==='del'){
                 singledel();
@@ -60,62 +71,45 @@ function allEvents(){
                 clearall();
             }
             if(element.getAttribute('id')==='equal'){
-                
                 equalPressed++;
-                let finalequation = final();
-                calculate(finalequation);
-    
+                if(equalPressed <= 1){
+                    let finalequation = final();
+                    calculate(finalequation);
+                }   
             }
-    
         })
     })
 }
 
 
 
-function final(){ // Push the last value entered into preview and return the final expression
-    let val = document.createTextNode((document.querySelector('.answer').textContent).replace(/\s/g, ""));
-    let display = document.querySelector('.equation');
-    display.appendChild(val);
-    return (document.querySelector('.equation').textContent);
+function final(){ // Push the last value entered into the preview area and return the final expression
+    let val = document.createTextNode((entireExpression.textContent).replace(/\s/g, ""));
+    previewExpression.appendChild(val);
+    return previewExpression.textContent;
 }
 
-function calculate(eq){ // get answer and if equal is pressed only once display the answer into the answer box
-
-    if(equalPressed ===1){
-        let sample = eq.split(' ');
-        let sign = document.querySelector('.sign');
-        let displayAnswer = document.querySelector('.display-ans')
-        let answer = document.createTextNode(compute(rpnParser(tokenizer(sample))));
-        displayAnswer.innerHTML = '';sign.textContent = '';
-        displayAnswer.appendChild(answer);
-    }  
-    console.log(`This is equal pressed ${equalPressed}`)
+function calculate(eq){
+    let expression = eq.split(' ');
+    let answer = document.createTextNode(compute(rpnParser(tokenizer(expression))));
+    displayAnswer.innerHTML = '';sign.textContent = '';
+    displayAnswer.appendChild(answer);
 }
-
 
 function singledel(){
-    let number = document.querySelector('.display-ans')
-    try {
-        number.removeChild(number.lastChild);    
-    } catch (error) {
-        //
-    }
-    
+    displayAnswer.removeChild(number.lastChild);    
 }
 
 function clearall(){
-    let number = document.querySelector('.display-ans')
-    let sign = document.querySelector('.sign');
-    let preview = document.querySelector('.equation');
-    number.innerHTML = '';
+    displayAnswer.innerHTML = '';
     sign.textContent = '';
-    preview.textContent='';
+    previewExpression.textContent='';
 }
 
 function display(op){
-    let preview = document.querySelector('.equation');
-    let number = (document.querySelector('.answer').textContent).replace(/\s/g, "");
+    
+    let number = (entireExpression.textContent).replace(/\s/g, "");
+
     if(number.indexOf('.') + 1 === number.length){
         number = number.replace('.','')
     }
@@ -132,20 +126,17 @@ function display(op){
     let operatortodisplay = document.createTextNode(op + ' ');
     test++;//added to ensure that the number entered stays until another number after the operator is pressed
     
-    if(number!=='' && number!=='-' && test<=1){
-        
-        preview.appendChild(numtodisplay);preview.appendChild(operatortodisplay)
+    if(number!=='' && number!=='-' && test<=1 && equalPressed === 0){
+        previewExpression.appendChild(numtodisplay);previewExpression.appendChild(operatortodisplay)
     }
-    if(equalPressed === 1){ 
-        preview.innerHTML = '';
-        preview.appendChild(numtodisplay);preview.appendChild(operatortodisplay)
+    else if(equalPressed >= 1){ 
+        previewExpression.innerHTML = '';
+        previewExpression.appendChild(numtodisplay);previewExpression.appendChild(operatortodisplay)
 
     }
     if(test>1){ 
-        
-        preview.removeChild(preview.lastChild);preview.appendChild(operatortodisplay);
+        previewExpression.removeChild(previewExpression.lastChild);previewExpression.appendChild(operatortodisplay);
     }
-    equalPressed=0;
     counter=0; 
 }
 
