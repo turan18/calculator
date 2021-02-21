@@ -97,7 +97,7 @@ function calculate(eq){
 }
 
 function singledel(){
-    displayAnswer.removeChild(number.lastChild);    
+    displayAnswer.removeChild(displayAnswer.lastChild);    
 }
 
 function clearall(){
