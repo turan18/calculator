@@ -28,6 +28,9 @@
 	}
 }
 
+body{
+	touch-action: manipulation;
+}
 
 
 .main-container{
